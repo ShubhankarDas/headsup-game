@@ -52,6 +52,11 @@ export function GameplayScreen({ navigation, route }: Props) {
   const roundOverRef = useRef(roundOver);
   roundOverRef.current = roundOver;
   const feedbackTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  // The single source of truth useTiltDetection uses to suppress new
+  // triggers while the correct/pass overlay is on screen — kept in lockstep
+  // with `feedback` itself (see effect below), not a second independent timer.
+  const feedbackSuppressRef = useRef(false);
+  feedbackSuppressRef.current = feedback !== null;
 
   useEffect(() => {
     return () => {
@@ -118,8 +123,10 @@ export function GameplayScreen({ navigation, route }: Props) {
   const showFeedback = useCallback((type: 'correct' | 'pass') => {
     if (feedbackTimeoutRef.current) clearTimeout(feedbackTimeoutRef.current);
     setFeedback(type);
-    // Matches useTiltDetection's REFRACTORY_MS, so the visual feedback
-    // window and the sensor's "ignore everything" cooldown stay in sync.
+    // useTiltDetection reads feedbackSuppressRef (mirrors `feedback`) to
+    // decide when to ignore gestures, so this duration is purely about how
+    // long the overlay is visible — gesture suppression tracks it exactly,
+    // not via a second independent timer.
     feedbackTimeoutRef.current = setTimeout(() => setFeedback(null), 500);
   }, []);
 
@@ -141,6 +148,7 @@ export function GameplayScreen({ navigation, route }: Props) {
     enabled: !roundOver,
     onTiltDown: handleCorrect,
     onTiltUp: handlePass,
+    suppressedRef: feedbackSuppressRef,
   });
 
   const correctCount = results.filter((r) => r.correct).length;
