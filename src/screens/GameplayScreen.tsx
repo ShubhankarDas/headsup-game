@@ -151,9 +151,6 @@ export function GameplayScreen({ navigation, route }: Props) {
     suppressedRef: feedbackSuppressRef,
   });
 
-  const correctCount = results.filter((r) => r.correct).length;
-  const passedCount = results.filter((r) => !r.correct).length;
-
   return (
     <SafeAreaView style={styles.container} edges={['top', 'bottom']}>
       <View style={styles.top}>
@@ -168,32 +165,8 @@ export function GameplayScreen({ navigation, route }: Props) {
         </View>
       </View>
 
-      <View style={styles.tiltHint}>
-        <MaterialCommunityIcons name="arrow-up-bold" size={14} color="rgba(255,255,255,0.55)" />
-        <Text style={styles.tiltHintText}>tilt up to pass</Text>
-      </View>
-
       <View style={styles.wordCard}>
         <Text style={styles.word}>{currentWord}</Text>
-        <View style={styles.sticker}>
-          <Text style={styles.stickerText}>{results.length + 1} words in</Text>
-        </View>
-      </View>
-
-      <View style={styles.tiltHint}>
-        <MaterialCommunityIcons name="arrow-down-bold" size={14} color="rgba(255,255,255,0.55)" />
-        <Text style={styles.tiltHintText}>tilt down when guessed</Text>
-      </View>
-
-      <View style={styles.scores}>
-        <View style={[styles.scoreBox, { borderColor: 'rgba(255,255,255,0.1)' }]}>
-          <Text style={[styles.scoreNum, { color: colors.lime }]}>{correctCount}</Text>
-          <Text style={styles.scoreLabel}>correct</Text>
-        </View>
-        <View style={[styles.scoreBox, { borderColor: 'rgba(255,255,255,0.1)' }]}>
-          <Text style={[styles.scoreNum, { color: colors.coral }]}>{passedCount}</Text>
-          <Text style={styles.scoreLabel}>passed</Text>
-        </View>
       </View>
 
       {feedback ? (
@@ -263,17 +236,6 @@ const styles = StyleSheet.create({
     fontSize: 20,
     color: '#fff',
   },
-  tiltHint: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: 6,
-  },
-  tiltHintText: {
-    fontFamily: fonts.bodySemiBold,
-    fontSize: 11,
-    color: 'rgba(255,255,255,0.55)',
-  },
   wordCard: {
     backgroundColor: colors.cloud,
     borderRadius: radii.xl,
@@ -292,44 +254,6 @@ const styles = StyleSheet.create({
     color: colors.ink,
     textAlign: 'center',
     paddingHorizontal: 16,
-  },
-  sticker: {
-    position: 'absolute',
-    bottom: 14,
-    right: 18,
-    backgroundColor: colors.sun,
-    paddingHorizontal: 10,
-    paddingVertical: 4,
-    borderRadius: 8,
-    transform: [{ rotate: '5deg' }],
-  },
-  stickerText: {
-    fontFamily: fonts.bodySemiBold,
-    fontSize: 10,
-    color: colors.ink,
-  },
-  scores: {
-    flexDirection: 'row',
-    gap: 10,
-  },
-  scoreBox: {
-    flex: 1,
-    backgroundColor: colors.ink2,
-    borderRadius: radii.md,
-    paddingVertical: 10,
-    alignItems: 'center',
-    borderWidth: 2,
-  },
-  scoreNum: {
-    fontFamily: fonts.displayExtraBold,
-    fontSize: 22,
-  },
-  scoreLabel: {
-    fontFamily: fonts.bodySemiBold,
-    fontSize: 10,
-    color: '#C9BEEA',
-    textTransform: 'uppercase',
-    letterSpacing: 0.5,
   },
   feedbackOverlay: {
     position: 'absolute',

@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useKeepAwake } from 'expo-keep-awake';
 import * as ScreenOrientation from 'expo-screen-orientation';
 import type { RootStackParamList } from '../navigation/types';
@@ -37,6 +38,17 @@ export function CountdownScreen({ navigation, route }: Props) {
     <SafeAreaView style={styles.container} edges={['top', 'bottom']}>
       <Text style={styles.count}>{count}</Text>
       <Text style={styles.label}>Rest the phone on your forehead{'\n'}screen facing the group</Text>
+
+      <View style={styles.hints}>
+        <View style={styles.hintRow}>
+          <MaterialCommunityIcons name="arrow-up-bold" size={16} color="rgba(255,255,255,0.75)" />
+          <Text style={styles.hintText}>tilt up to pass</Text>
+        </View>
+        <View style={styles.hintRow}>
+          <MaterialCommunityIcons name="arrow-down-bold" size={16} color="rgba(255,255,255,0.75)" />
+          <Text style={styles.hintText}>tilt down when guessed</Text>
+        </View>
+      </View>
     </SafeAreaView>
   );
 }
@@ -60,5 +72,20 @@ const styles = StyleSheet.create({
     color: 'rgba(255,255,255,0.75)',
     textAlign: 'center',
     marginTop: 12,
+  },
+  hints: {
+    marginTop: 36,
+    gap: 10,
+  },
+  hintRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 8,
+  },
+  hintText: {
+    fontFamily: fonts.bodySemiBold,
+    fontSize: 13,
+    color: 'rgba(255,255,255,0.75)',
   },
 });
